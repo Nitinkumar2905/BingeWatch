@@ -5,6 +5,8 @@ const MovieCard = () => {
   const navigate = useNavigate();
   const [movieDetails, setMovieDetails] = useState([]);
   const [recommended, setRecommended] = useState([]);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState([]);
   const { id } = useParams();
 
   const updateData = async () => {
@@ -43,7 +45,7 @@ const MovieCard = () => {
       const response = await fetch(
         `https://api.themoviedb.org/3/movie/${
           id ? id : "385687"
-        }/recommendations?language=en-US&page=1`,
+        }/similar?language=en-US&page=${page}`,
         {
           method: "GET",
           headers: {
@@ -55,8 +57,9 @@ const MovieCard = () => {
       );
       if (response.ok) {
         const data = await response.json();
-        console.log(data.results);
+        console.log(data);
         setRecommended(data.results);
+        setTotalPages(data.total_pages);
       } else {
         console.log("network error");
       }
@@ -64,9 +67,23 @@ const MovieCard = () => {
       console.error(error);
     }
   };
+
+  const handleNextClick = () => {
+    setPage((prevPage) => prevPage + 1);
+    similarMovieData(page + 1);
+    console.log(page);
+  };
+
+  const handlePreviousClick = () => {
+    setPage((prevPage) => prevPage - 1);
+    similarMovieData(page - 1);
+    console.log(page);
+  };
   useEffect(() => {
     similarMovieData();
-  }, []);
+    // localStorage.setItem('currentPage',page)
+    // eslint-disable-next-line
+  }, [page]);
 
   const handleCardClick = (clickedMovieId) => {
     const updatedRecommended = recommended.filter(
@@ -161,16 +178,52 @@ const MovieCard = () => {
             </span>
           )}
 
-          <div className="my-6 mx-4">
-            {recommended ? (
-              recommended.length > 0 ? (
-                <span className="text-3xl font-semibold">Recommended</span>
-              ) : (
-                ""
-              )
-            ) : (
-              "loading"
-            )}
+          <div className="my-6 mx-6 space-y-6">
+            <div className="flex justify-between items-center">
+              <div>
+                {recommended ? (
+                  recommended.length > 0 ? (
+                    <span className="text-3xl font-semibold">
+                      You may also like
+                    </span>
+                  ) : (
+                    ""
+                  )
+                ) : (
+                  "loading"
+                )}
+              </div>
+              <span className="shadow-sm shadow-black px-3 py-1 rounded-lg">
+                Page: {page}/{totalPages}
+              </span>
+              <div className="space-x-4 text-white">
+                <button
+                  className={`shadow-black shadow-sm px-3 py-1 rounded-lg ${
+                    page > 1 ? "bg-sky-600" : "bg-sky-900"
+                  } `}
+                  disabled={page <= 1}
+                  onClick={handlePreviousClick}
+                  style={{
+                    cursor: page > 1 ? "pointer" : "not-allowed",
+                  }}
+                >
+                  Previous
+                </button>
+                <button
+                  className={`shadow-black shadow-sm px-3 py-1 rounded-lg ${
+                    page <= totalPages ? "bg-sky-600" : "bg-sky-900"
+                  }`}
+                  disabled={page >= totalPages}
+                  onClick={handleNextClick}
+                  style={{
+                    cursor: page <= totalPages ? "pointer" : "not-allowed",
+                  }}
+                >
+                  Next
+                </button>
+              </div>
+            </div>
+
             <div className="my-4 grid gap-6 grid-flow-row grid-col-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-col-6">
               {recommended &&
                 recommended.map((movie) => {

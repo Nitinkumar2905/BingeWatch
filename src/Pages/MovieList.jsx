@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from "react";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import { Link, useParams } from "react-router-dom";
+import loadingGif from "../images/loading.gif";
 
 const MovieList = () => {
   const [movieData, setMovieData] = useState([]);
   const [loading, setLoading] = useState(true);
   const { type } = useParams();
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState([]);
 
   const updateData = async () => {
     try {
@@ -13,7 +16,7 @@ const MovieList = () => {
       const response = await fetch(
         `https://api.themoviedb.org/3/movie/${
           type ? type : "popular"
-        }?language=en-US&page=1`,
+        }?language=en-US&page=${page}`,
         {
           method: "GET",
           headers: {
@@ -26,9 +29,10 @@ const MovieList = () => {
 
       if (response.ok) {
         const data = await response.json();
-        console.log(data.results);
+        console.log(data);
         setMovieData(data.results);
         setLoading(false);
+        setTotalPages(data.total_pages);
       } else {
         console.log("network error");
         setLoading(false);
@@ -39,73 +43,110 @@ const MovieList = () => {
     }
   };
 
+  const handleNextPage = () => {
+    setPage((prevPage) => prevPage + 1);
+    updateData(page + 1);
+    // console.log(updateData.data);
+  };
+
+  const handlePreviousPage = () => {
+    setPage((prevPage) => prevPage - 1);
+    updateData(page - 1);
+  };
+
   useEffect(() => {
-    updateData();
+    updateData(1);
+    setPage(1);
   }, [type]);
 
   return (
     <>
-      {/* {!loading ? ( */}
-        <div className="m-4 space-y-4" style={{ fontFamily: "georgia" }}>
-          <span
-            style={{ textTransform: "capitalize" }}
-            className="text-3xl font-semibold"
-          >
-            {type ? type : "popular"}
-          </span>
+      {!loading ? (
+        <div className="my-10 mx-4 space-y-6" style={{ fontFamily: "georgia" }}>
+          <div className="flex justify-between items-center">
+            <span
+              style={{ textTransform: "capitalize" }}
+              className="text-3xl font-semibold"
+            >
+              {type ? type : "popular"}
+            </span>
+            <span className="rounded-lg px-3 py-1 shadow-sm shadow-black">
+              Page: {page}/{totalPages}
+            </span>
+            <div className="space-x-4 text-white">
+              <button
+                className={`shadow-sm shadow-black px-3 py-1 rounded-lg ${
+                  page > 1 ? "bg-sky-600" : "bg-sky-900"
+                }`}
+                onClick={handlePreviousPage}
+                disabled={page <= 1}
+                style={{ cursor: page > 1 ? "pointer" : "not-allowed" }}
+              >
+                Previous
+              </button>
+              <button
+                className={`shadow-sm shadow-black px-3 py-1 rounded-lg ${
+                  page <= totalPages ? "bg-sky-600" : "bg-sky-900"
+                }`}
+                onClick={handleNextPage}
+                disabled={page >= totalPages}
+                style={{
+                  cursor: page <= totalPages ? "pointer" : "not-allowed",
+                }}
+              >
+                Next
+              </button>
+            </div>
+          </div>
           <div className="grid grid-flow-row grid-cols-1 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
             {movieData.map((data) => {
               return (
                 <>
-                <div>
-
-                  {!data ? (
-                    <SkeletonTheme
-                    baseColor="#202020"
-                    highlightColor="#444"
-                    >
-                      <Skeleton height={300} duration={2}></Skeleton>
-                    </SkeletonTheme>
-                  ) : (
-                    <Link to={`/movie/${data.id}`}>
-                      <img
-                        className="shadow-sm h-84 shadow-black rounded-lg"
-                        src={`https://image.tmdb.org/t/p/original/${data.poster_path}`}
-                        alt=""
+                  <div>
+                    {!data ? (
+                      <SkeletonTheme baseColor="#202020" highlightColor="#444">
+                        <Skeleton height={300} duration={2}></Skeleton>
+                      </SkeletonTheme>
+                    ) : (
+                      <Link to={`/movie/${data.id}`}>
+                        <img
+                          className="shadow-sm h-84 shadow-black rounded-lg"
+                          src={`https://image.tmdb.org/t/p/original/${data.poster_path}`}
+                          alt=""
                         />
-                    </Link>
-                  )}
-                  <div className="my-3 flex flex-col">
-                          <Link
-                            to={`/movie/${data.id}-${data.title}`}
-                            className="hover:underline duration-200"
-                          >
-                            {data.title
-                              ? data.title.length > 30
-                                ? `${data.title.slice(0, 30)}...`
-                                : data.title
-                              : ""}
-                          </Link>
-                          <div className="flex justify-between">
-                            <span className="">{data.release_date}</span>
-                            <span>
-                              {data.vote_average
-                                ? `${Math.round(data.vote_average * 10) / 10}`
-                                : 0}
-                            </span>
-                          </div>
-                        </div>
+                      </Link>
+                    )}
+                    <div className="my-3 flex flex-col">
+                      <Link
+                        to={`/movie/${data.id}-${data.title}`}
+                        className="hover:underline duration-200"
+                      >
+                        {data.title
+                          ? data.title.length > 30
+                            ? `${data.title.slice(0, 30)}...`
+                            : data.title
+                          : ""}
+                      </Link>
+                      <div className="flex justify-between">
+                        <span className="">{data.release_date}</span>
+                        <span>
+                          {data.vote_average
+                            ? `${Math.round(data.vote_average * 10) / 10}`
+                            : 0}
+                        </span>
+                      </div>
+                    </div>
                   </div>
                 </>
               );
             })}
           </div>
         </div>
-      {/* ) : ( */}
-        {/* <span className="flex justify-center items-center h-fit my-12"> */}
-          {/* loadin.g data */}
-        {/* </span> */}
-      {/* )} */}
+      ) : (
+        <div className="flex justify-center items-center h-fit my-12">
+          <img src={loadingGif} alt="" />
+        </div>
+      )}
     </>
   );
 };
