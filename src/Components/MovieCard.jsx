@@ -7,6 +7,7 @@ const MovieCard = () => {
   const [recommended, setRecommended] = useState([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState([]);
+  const [videoKey, setVideoKey] = useState();
   const { id } = useParams();
 
   const updateData = async () => {
@@ -14,7 +15,7 @@ const MovieCard = () => {
       const response = await fetch(
         `https://api.themoviedb.org/3/movie/${
           id ? id : "385687"
-        }?language=en-US&page=1`,
+        }?/language=en-US&page=1`,
         {
           method: "GET",
           headers: {
@@ -35,10 +36,6 @@ const MovieCard = () => {
       console.error(error);
     }
   };
-  useEffect(() => {
-    updateData();
-    window.scrollTo(0, 0);
-  }, [id]);
 
   const similarMovieData = async () => {
     try {
@@ -79,9 +76,48 @@ const MovieCard = () => {
     similarMovieData(page - 1);
     console.log(page);
   };
+
+  const updateMovieVideo = async () => {
+    try {
+      const response = await fetch(
+        `https://api.themoviedb.org/3/movie/${
+          id ? id : "385687"
+        }/videos?language=en-US`,
+        {
+          method: "GET",
+          headers: {
+            accept: "application/json",
+            authorization:
+              "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJjZWI1NWUyN2RjMTdkNDVjNDViM2Q3NGQ5ZjMzZDg2OCIsInN1YiI6IjY1MmQ5MjE0MGNiMzM1MTZmODg0NzFlMyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.2NNwlH4pu5jdkXeyvHRgmo4dJPW_vwvTB-a_BlLTyls",
+          },
+        }
+      );
+      if (response.ok) {
+        const videoData = await response.json();
+        // console.log("video" + videoData.results);
+        if (videoData.results && videoData.results.length > 0) {
+          // Assuming you want to use the first video's key
+          const videoKey = videoData.results[0].key;
+          setVideoKey(videoKey);
+        }
+      } else {
+        console.log("network error");
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  useEffect(() => {
+    updateData();
+    window.scrollTo(0, 0);
+    // eslint-disable-next-line
+  }, [id, videoKey]);
+  useEffect(() => {
+    updateMovieVideo();
+    // eslint-disable-next-line
+  }, [id]);
   useEffect(() => {
     similarMovieData();
-    // localStorage.setItem('currentPage',page)
     // eslint-disable-next-line
   }, [page]);
 
@@ -95,81 +131,121 @@ const MovieCard = () => {
   return (
     <>
       {movieDetails && (
-        <div style={{ fontFamily: "georgia" }}>
+        <div>
           {movieDetails.title ? (
-            <div className="flex space-x-4 w-5/6 mx-auto my-20">
-              <div>
-                <img
-                  className="rounded-md h-96 w-80"
-                  src={`https://image.tmdb.org/t/p/original/${
-                    movieDetails && movieDetails.poster_path
-                  }`}
-                  alt=""
-                />
-              </div>
-              <div className="space-y-2 flex justify-center items-start flex-col border-0 border-black w-fit">
-                <span className="font-semibold text-2xl">
-                  {movieDetails && movieDetails.title}
-                </span>
-
-                <span>{movieDetails && movieDetails.overview}</span>
-
-                <div className="flex flex-col">
-                  {movieDetails.release_date && (
-                    <span className="text-lg">
-                      Released: {movieDetails && movieDetails.release_date}
-                    </span>
-                  )}
-                  {movieDetails.vote_average && (
-                    <span className="text-lg">
-                      Rating: {movieDetails && movieDetails.vote_average}
-                    </span>
-                  )}
-                  {/* <span>{movieDetails && movieDetails.original_language}</span> */}
-                  {movieDetails.runtime && (
-                    <span className="text-lg">
-                      Duration: {movieDetails && movieDetails.runtime}m
-                    </span>
-                  )}
-                  {movieDetails.genres && (
-                    <div className="text-lg">
-                      Genre: &nbsp;
-                      {movieDetails && movieDetails.genres
-                        ? movieDetails.genres.map((genre) => (
-                            <span key={genre.id} className="mr-1">
-                              {genre.name},
-                            </span>
-                          ))
-                        : null}
-                    </div>
-                  )}
-                  {movieDetails.production_countries && (
-                    <div className="text-lg">
-                      Countries:{" "}
-                      {movieDetails && movieDetails.production_countries
-                        ? movieDetails.production_countries.map((countries) => (
-                            <span key={countries.iso_3166_1}>
-                              {countries.name}
-                            </span>
-                          ))
-                        : null}
-                    </div>
-                  )}
-                  {movieDetails.production_companies && (
-                    <div className="text-lg">
-                      Production:{" "}
-                      {movieDetails && movieDetails.production_companies
-                        ? movieDetails.production_companies.map(
-                            (production) => (
-                              <span key={production.id}>
-                                {production.name},{" "}
-                              </span>
-                            )
-                          )
-                        : null}
-                    </div>
-                  )}
+            <div className="flex items-center justify-between w-[95%] mx-auto">
+              <div className="flex space-x-4 w-fit my-20">
+                <div>
+                  <img
+                    key={movieDetails.id}
+                    className="rounded-md h-96 shadow-sm shadow-black"
+                    src={`https://image.tmdb.org/t/p/original/${
+                      movieDetails && movieDetails.poster_path
+                    }`}
+                    alt=""
+                  />
                 </div>
+                <div className="space-y-2 flex justify-center items-start flex-col border-0 border-black w-[30rem]">
+                  <span className="font-semibold text-2xl">
+                    {movieDetails && movieDetails.title}
+                  </span>
+
+                  <span>{movieDetails && movieDetails.overview}</span>
+
+                  <div className="flex flex-col">
+                    {movieDetails.release_date && (
+                      <div>
+                        <span className="text-lg font-semibold">
+                          Released:{" "}
+                        </span>{" "}
+                        {movieDetails && movieDetails.release_date}
+                      </div>
+                    )}
+                    {movieDetails.vote_average && (
+                      <div>
+                        <span className="text-lg font-semibold">Rating: </span>
+                        {Math.round(movieDetails.vote_average * 10) / 10}
+                      </div>
+                    )}
+                    {/* <span>{movieDetails && movieDetails.original_language}</span> */}
+                    {movieDetails.runtime && (
+                      <div>
+                        <span className="text-lg font-semibold">
+                          Duration:{" "}
+                        </span>{" "}
+                        {movieDetails && movieDetails.runtime}m
+                      </div>
+                    )}
+                    {movieDetails.genres && (
+                      <div>
+                        <span className="text-lg font-semibold">Genre: </span>
+                        {movieDetails && movieDetails.genres
+                          ? movieDetails.genres.map((genre) => (
+                              <span key={genre.id} className="mr-1">
+                                {genre.name},
+                              </span>
+                            ))
+                          : null}
+                      </div>
+                    )}
+                    {movieDetails.production_countries && (
+                      <div>
+                       <span className="text-lg font-semibold">Countries: </span>
+                        {movieDetails && movieDetails.production_countries
+                          ? movieDetails.production_countries.map(
+                              (countries) => (
+                                <span key={countries.iso_3166_1}>
+                                  {countries.name}, &nbsp;
+                                </span>
+                              )
+                            )
+                          : null}
+                      </div>
+                    )}
+                    {movieDetails.production_companies && (
+                      <div>
+                        <span className="text-lg font-semibold">Production: </span>
+                        {movieDetails && movieDetails.production_companies
+                          ? movieDetails.production_companies.map(
+                              (production) => (
+                                <span key={production.id}>
+                                  {production.name},{" "}
+                                </span>
+                              )
+                            )
+                          : null}
+                      </div>
+                    )}
+
+                    {movieDetails && (
+                      <Link
+                        target="blank"
+                        className={`my-1 text-white shadow-black shadow-sm px-3 py-1 w-fit rounded-lg ${
+                          movieDetails ? "bg-sky-600" : "bg-sky-900"
+                        }`}
+                        to={`https://www.themoviedb.org/movie/${id}-${movieDetails.title}/watch?locale=US`}
+                      >
+                        Watch here
+                      </Link>
+                    )}
+                  </div>
+                </div>
+              </div>
+              <div className="items-start space-y-3">
+                <span className="font-semibold text-2xl">
+                  A glimpse of movie
+                </span>
+                <iframe
+                  className="rounded-lg shadow-sm shadow-black"
+                  width={560}
+                  height={315}
+                  title="movieVideo"
+                  src={`https://www.youtube.com/embed/${
+                    videoKey ? videoKey : ""
+                  }`}
+                  frameBorder={0}
+                  allowFullScreen
+                ></iframe>
               </div>
             </div>
           ) : (
@@ -193,9 +269,6 @@ const MovieCard = () => {
                   "loading"
                 )}
               </div>
-              <span className="shadow-sm shadow-black px-3 py-1 rounded-lg">
-                Page: {page}/{totalPages}
-              </span>
               <div className="space-x-4 text-white">
                 <button
                   className={`shadow-black shadow-sm px-3 py-1 rounded-lg ${
@@ -211,12 +284,12 @@ const MovieCard = () => {
                 </button>
                 <button
                   className={`shadow-black shadow-sm px-3 py-1 rounded-lg ${
-                    page <= totalPages ? "bg-sky-600" : "bg-sky-900"
+                    page < totalPages ? "bg-sky-600" : "bg-sky-900"
                   }`}
                   disabled={page >= totalPages}
                   onClick={handleNextClick}
                   style={{
-                    cursor: page <= totalPages ? "pointer" : "not-allowed",
+                    cursor: page < totalPages ? "pointer" : "not-allowed",
                   }}
                 >
                   Next
@@ -224,7 +297,7 @@ const MovieCard = () => {
               </div>
             </div>
 
-            <div className="my-4 grid gap-6 grid-flow-row grid-col-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-col-6">
+            <div className="my-4 grid gap-4 grid-flow-row grid-col-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
               {recommended &&
                 recommended.map((movie) => {
                   return (
@@ -241,6 +314,7 @@ const MovieCard = () => {
                               onClick={() => handleCardClick(movie.id)}
                             >
                               <img
+                                key={movie.id}
                                 className={`border-0 border-black shadow-sm shadow-black h-96 rounded-lg`}
                                 src={`https://image.tmdb.org/t/p/original/${movie.poster_path}`}
                                 alt=""

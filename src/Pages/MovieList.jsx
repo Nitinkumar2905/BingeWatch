@@ -1,16 +1,21 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import { Link, useParams } from "react-router-dom";
 import loadingGif from "../images/loading.gif";
+import MovieContext from "../Context/MovieContext";
 
 const MovieList = () => {
-  const [movieData, setMovieData] = useState([]);
+  const [movieList, setmovieList] = useState([]);
   const [loading, setLoading] = useState(true);
   const { type } = useParams();
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState([]);
 
-  const updateData = async () => {
+  // const context = useContext(MovieContext);
+  // const { movieListData, page, setPage, movieList, loading, totalPages } =
+  //   context;
+
+  const movieListData = async () => {
     try {
       setLoading(true);
       const response = await fetch(
@@ -30,7 +35,7 @@ const MovieList = () => {
       if (response.ok) {
         const data = await response.json();
         console.log(data);
-        setMovieData(data.results);
+        setmovieList(data.results);
         setLoading(false);
         setTotalPages(data.total_pages);
       } else {
@@ -45,33 +50,30 @@ const MovieList = () => {
 
   const handleNextPage = () => {
     setPage((prevPage) => prevPage + 1);
-    updateData(page + 1);
-    // console.log(updateData.data);
+    movieListData(page + 1);
   };
 
   const handlePreviousPage = () => {
     setPage((prevPage) => prevPage - 1);
-    updateData(page - 1);
+    movieListData(page - 1);
   };
 
   useEffect(() => {
-    updateData(1);
+    movieListData(1, type);
     setPage(1);
+    // eslint-disable-next-line
   }, [type]);
 
   return (
     <>
       {!loading ? (
-        <div className="my-10 mx-4 space-y-6" style={{ fontFamily: "georgia" }}>
+        <div className="my-10 mx-4 space-y-6">
           <div className="flex justify-between items-center">
             <span
               style={{ textTransform: "capitalize" }}
               className="text-3xl font-semibold"
             >
               {type ? type : "popular"}
-            </span>
-            <span className="rounded-lg px-3 py-1 shadow-sm shadow-black">
-              Page: {page}/{totalPages}
             </span>
             <div className="space-x-4 text-white">
               <button
@@ -98,8 +100,8 @@ const MovieList = () => {
               </button>
             </div>
           </div>
-          <div className="grid grid-flow-row grid-cols-1 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-            {movieData.map((data) => {
+          <div className="grid grid-flow-row grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+            {movieList.map((data) => {
               return (
                 <>
                   <div>
@@ -110,7 +112,7 @@ const MovieList = () => {
                     ) : (
                       <Link to={`/movie/${data.id}`}>
                         <img
-                          className="shadow-sm h-84 shadow-black rounded-lg"
+                          className="shadow-sm h-84 shadow-black rounded-lg hover:scale-105 duration-500 ease-in-out"
                           src={`https://image.tmdb.org/t/p/original/${data.poster_path}`}
                           alt=""
                         />
