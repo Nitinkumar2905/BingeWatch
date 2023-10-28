@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import loadingGif from "../images/loading.gif"
 
 const MovieCard = () => {
   const navigate = useNavigate();
@@ -133,19 +134,20 @@ const MovieCard = () => {
       {movieDetails && (
         <div>
           {movieDetails.title ? (
-            <div className="flex items-center justify-between w-[95%] mx-auto">
-              <div className="flex space-x-4 w-fit my-20">
-                <div>
+            <div className="flex flex-col xl:flex-row items-center justify-between w-[95%] mx-auto">
+              <div className="flex flex-col sm:flex-row justify-center items-center space-x-4 space-y-6 md:space-y-0 w-fit my-10">
+                <div className="mx-auto">
                   <img
                     key={movieDetails.id}
-                    className="rounded-md h-96 shadow-sm shadow-black"
+                    className="rounded-md h-[30rem] sm:h-96 object-cover shadow-sm shadow-black"
                     src={`https://image.tmdb.org/t/p/original/${
                       movieDetails && movieDetails.poster_path
                     }`}
                     alt=""
                   />
                 </div>
-                <div className="space-y-2 flex justify-center items-start flex-col border-0 border-black w-[30rem]">
+                {/* movie details */}
+                <div className="space-y-2 flex justify-center items-start flex-col border-0 border-black w-fit sm:w-[30rem] md:w-[40rem] lg:w-[45rem] xl:w-[36rem]">
                   <span className="font-semibold text-2xl">
                     {movieDetails && movieDetails.title}
                   </span>
@@ -231,30 +233,30 @@ const MovieCard = () => {
                   </div>
                 </div>
               </div>
+              {/* movie related youtube video */}
               <div className="items-start space-y-3">
                 <span className="font-semibold text-2xl">
                   A glimpse of movie
                 </span>
                 <iframe
-                  className="rounded-lg shadow-sm shadow-black"
-                  width={560}
-                  height={315}
+                  className="rounded-lg shadow-sm shadow-black w-[330px] sm:w-[400px] md:w-[860px] xl:w-[490px] h-[230px] md:h-[415px] xl:h-[300px]"
+                  // width={560}
+                  // height={315}
                   title="movieVideo"
                   src={`https://www.youtube.com/embed/${
                     videoKey ? videoKey : ""
                   }`}
-                  frameBorder={0}
                   allowFullScreen
                 ></iframe>
               </div>
             </div>
           ) : (
             <span className="flex justify-center h-[32rem] items-center">
-              loading
+              <img src={loadingGif} alt="" />
             </span>
           )}
 
-          <div className="my-6 mx-6 space-y-6">
+          <div className="space-y-6 bg-gray-100 p-6 rounded-lg">
             <div className="flex justify-between items-center">
               <div>
                 {recommended ? (
@@ -266,10 +268,10 @@ const MovieCard = () => {
                     ""
                   )
                 ) : (
-                  "loading"
+                  <span><img src={loadingGif} alt="" /></span>
                 )}
               </div>
-              <div className="space-x-4 text-white">
+              {recommended&&recommended.length>0?<div className="space-x-4 text-white">
                 <button
                   className={`shadow-black shadow-sm px-3 py-1 rounded-lg ${
                     page > 1 ? "bg-sky-600" : "bg-sky-900"
@@ -294,10 +296,10 @@ const MovieCard = () => {
                 >
                   Next
                 </button>
-              </div>
+              </div>:""}
             </div>
 
-            <div className="my-4 grid gap-4 grid-flow-row grid-col-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+            <div className="my-4 grid gap-4 grid-flow-row grid-col-1 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
               {recommended &&
                 recommended.map((movie) => {
                   return (
@@ -315,7 +317,7 @@ const MovieCard = () => {
                             >
                               <img
                                 key={movie.id}
-                                className={`border-0 border-black shadow-sm shadow-black h-96 rounded-lg`}
+                                className={`border-0 border-black shadow-sm shadow-black h-[30rem] mx-auto w-screen object-cover md:h-96 rounded-lg`}
                                 src={`https://image.tmdb.org/t/p/original/${movie.poster_path}`}
                                 alt=""
                               />

@@ -71,13 +71,13 @@ const MovieList = () => {
           <div className="flex justify-between items-center">
             <span
               style={{ textTransform: "capitalize" }}
-              className="text-3xl font-semibold"
+              className="text-2xl md:text-3xl font-semibold"
             >
               {type ? type : "popular"}
             </span>
             <div className="space-x-4 text-white">
               <button
-                className={`shadow-sm shadow-black px-3 py-1 rounded-lg ${
+                className={`shadow-sm shadow-black px-3 text-sm md:text-base py-1 rounded-lg ${
                   page > 1 ? "bg-sky-600" : "bg-sky-900"
                 }`}
                 onClick={handlePreviousPage}
@@ -87,7 +87,7 @@ const MovieList = () => {
                 Previous
               </button>
               <button
-                className={`shadow-sm shadow-black px-3 py-1 rounded-lg ${
+                className={`shadow-sm shadow-black px-3 text-sm md:text-base py-1 rounded-lg ${
                   page <= totalPages ? "bg-sky-600" : "bg-sky-900"
                 }`}
                 onClick={handleNextPage}
@@ -112,7 +112,7 @@ const MovieList = () => {
                     ) : (
                       <Link to={`/movie/${data.id}`}>
                         <img
-                          className="shadow-sm h-84 shadow-black rounded-lg hover:scale-105 duration-500 ease-in-out"
+                          className="border-0 border-black shadow-sm shadow-black h-[30rem] mx-auto w-screen object-cover md:h-96 rounded-lg"
                           src={`https://image.tmdb.org/t/p/original/${data.poster_path}`}
                           alt=""
                         />

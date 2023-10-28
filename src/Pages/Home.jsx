@@ -43,16 +43,16 @@ const Home = () => {
                   className="relative"
                   to={`/movie/${movie.id}`}
                 >
-                  <div className="h-[80vh] mx-auto">
+                  <div className="h-full md:h-fit lg:h-[80vh] mx-auto">
                     <img
-                      className="w-full"
+                      className="w-full h-96 lg:h-fit object-cover"
                       src={`https://image.tmdb.org/t/p/original/${
                         movie && movie.backdrop_path
                       }`}
                       alt=""
                     />
                   </div>
-                  <div className="w-[90%] absolute flex flex-col bottom-14 p-10 text-white bg-black mx-10 bg-opacity-20 rounded-lg">
+                  <div className="w-[90%] absolute hidden lg:flex flex-col bottom-14 p-10 text-white bg-black mx-10 bg-opacity-20 rounded-lg">
                     <div className="flex flex-col items-start">
                       <span className="text-xl font-bold">
                         {movie && movie.title}
@@ -79,10 +79,10 @@ const Home = () => {
 
         <div className="my-10 mx-4 space-y-4">
           <div className="flex justify-between mx-1">
-            <span className="text-3xl font-semibold">Popular Movies</span>
+            <span className="text-xl md:text-3xl font-semibold">Popular Movies</span>
             <div className="space-x-4 text-white">
               <button
-                className={`shadow-sm shadow-black rounded-lg px-3 py-1 ${
+                className={`shadow-sm shadow-black rounded-lg text-xs md:text-base px-3 py-1 ${
                   page > 1 ? "bg-sky-700" : "bg-sky-900"
                 } ${page > 1 ? "cursor-pointer" : "cursor-not-allowed"}`}
                 disabled={page <= 1}
@@ -91,7 +91,7 @@ const Home = () => {
                 Previous
               </button>
               <button
-                className={`shadow-sm shadow-black rounded-lg px-3 py-1 ${
+                className={`shadow-sm shadow-black rounded-lg text-xs md:text-base px-3 py-1 ${
                   page <= totalPages ? "bg-sky-700" : "bg-sky-900"
                 } ${
                   page <= totalPages ? "cursor-pointer" : "cursor-not-allowed"
@@ -103,16 +103,16 @@ const Home = () => {
               </button>
             </div>
           </div>
-          <div className="my-4 grid gap-6 grid-flow-row grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+          <div className="my-4 grid gap-4 grid-flow-row grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
             {popularMovies &&
               popularMovies.map((movie) => {
                 return (
                   <>
-                    <div className="space-y-3" key={movie.id}>
+                    <div className="space-y-3 w-fit mx-auto" key={movie.id}>
                       <Link className="w-fit" to={`/movie/${movie.id}`}>
                         <div className="hover:scale-105 duration-500 ease-in-out ">
                           <img
-                            className={`border-0 border-black shadow-sm shadow-black h-96 rounded-lg`}
+                            className={`border-0 border-black shadow-sm shadow-black h-[30rem] mx-auto w-screen object-cover md:h-96 rounded-lg`}
                             src={`https://image.tmdb.org/t/p/original/${movie.poster_path}`}
                             alt=""
                             // onLoad={setFetching(true)}
