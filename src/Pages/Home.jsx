@@ -2,7 +2,7 @@ import React, { useContext, useEffect } from "react";
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import { Carousel } from "react-responsive-carousel";
 import { Link } from "react-router-dom";
-import Search from "../SearchMovies/Search";
+import loadingGif from "../images/loading.gif"
 import MovieContext from "../Context/MovieContext";
 
 const Home = () => {
@@ -74,7 +74,7 @@ const Home = () => {
         </Carousel>
 
         <div className="my-10 mx-4 space-y-4">
-          <div className="flex justify-between mx-1">
+          {popularMovies&&popularMovies.length>0?<div className="flex justify-between mx-1">
             <span className="text-xl md:text-3xl font-semibold">
               Popular Movies
             </span>
@@ -100,7 +100,7 @@ const Home = () => {
                 Next
               </button>
             </div>
-          </div>
+          </div>:<span><img src={loadingGif} alt="" /></span>}
           <div className="my-4 grid gap-4 grid-flow-row grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
             {popularMovies &&
               popularMovies.map((movie) => {

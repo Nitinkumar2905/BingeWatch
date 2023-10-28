@@ -256,7 +256,7 @@ const MovieCard = () => {
             </span>
           )}
 
-          <div className="space-y-6 mt-5 bg-gray-100 p-6 rounded-lg">
+          {recommended&&recommended.length>0&&<div className="space-y-6 mt-5 bg-gray-100 p-6 rounded-lg">
             <div className="flex justify-between items-center">
               <div>
                 {recommended ? (
@@ -352,7 +352,7 @@ const MovieCard = () => {
                   );
                 })}
             </div>
-          </div>
+          </div>}
         </div>
       )}
     </>
