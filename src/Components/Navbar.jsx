@@ -110,6 +110,9 @@ const Navbar = () => {
                 onKeyDown={(e) => {
                   if (e.key === "Enter") {
                     handleSearch();
+                    if(!query.length<=0){
+                      handleSearch()
+                    }
                     navigate("/searchResults");
                   }
                 }}
