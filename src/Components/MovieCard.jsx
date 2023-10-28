@@ -256,12 +256,12 @@ const MovieCard = () => {
             </span>
           )}
 
-          <div className="space-y-6 bg-gray-100 p-6 rounded-lg">
+          <div className="space-y-6 mt-5 bg-gray-100 p-6 rounded-lg">
             <div className="flex justify-between items-center">
               <div>
                 {recommended ? (
                   recommended.length > 0 ? (
-                    <span className="text-3xl font-semibold">
+                    <span className="text-xl xl:text-3xl font-semibold">
                       You may also like
                     </span>
                   ) : (
@@ -273,7 +273,7 @@ const MovieCard = () => {
               </div>
               {recommended&&recommended.length>0?<div className="space-x-4 text-white">
                 <button
-                  className={`shadow-black shadow-sm px-3 py-1 rounded-lg ${
+                  className={`shadow-black shadow-sm text-sm md:text-base px-3 py-1 rounded-lg ${
                     page > 1 ? "bg-sky-600" : "bg-sky-900"
                   } `}
                   disabled={page <= 1}
@@ -285,7 +285,7 @@ const MovieCard = () => {
                   Previous
                 </button>
                 <button
-                  className={`shadow-black shadow-sm px-3 py-1 rounded-lg ${
+                  className={`shadow-black shadow-sm text-sm md:text-base px-3 py-1 rounded-lg ${
                     page < totalPages ? "bg-sky-600" : "bg-sky-900"
                   }`}
                   disabled={page >= totalPages}
