@@ -58,7 +58,7 @@ const Navbar = () => {
         <div className="shadow-sm shadow-black bg-sky-700 text-white w-full flex px-4 items-center h-16 justify-between">
           <div className="flex justify-between w-full md:w-fit">
             <Link to="/">
-              <span onClick={toggleMenu} className="text-2xl">BingeWatch</span>
+              <span onClick={()=>setShowMenu(false)} className="text-2xl">BingeWatch</span>
             </Link>
             {/* hamburger icon */}
             <span
