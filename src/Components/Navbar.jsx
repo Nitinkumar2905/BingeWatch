@@ -111,9 +111,8 @@ const Navbar = () => {
                   if (e.key === "Enter") {
                     handleSearch();
                     if(!query.length<=0){
-                      handleSearch()
+                      navigate("/searchResults");
                     }
-                    navigate("/searchResults");
                   }
                 }}
               />
