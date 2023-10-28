@@ -105,19 +105,16 @@ const MovieList = () => {
               return (
                 <>
                   <div>
-                    {!data ? (
-                      <SkeletonTheme baseColor="#202020" highlightColor="#444">
-                        <Skeleton height={300} duration={2}></Skeleton>
-                      </SkeletonTheme>
-                    ) : (
-                      <Link to={`/movie/${data.id}`}>
-                        <img
-                          className="border-0 border-black shadow-sm shadow-black h-[30rem] mx-auto w-screen object-cover md:h-96 rounded-lg"
-                          src={`https://image.tmdb.org/t/p/original/${data.poster_path}`}
-                          alt=""
-                        />
-                      </Link>
-                    )}
+                    <div
+                      className="md:hover:scale-105 duration-500 ease-in-out"
+                      to={`/movie/${data.id}`}
+                    >
+                      <img
+                        className="border-0 border-black shadow-sm shadow-black h-[30rem] mx-auto w-screen object-cover md:h-96 rounded-lg"
+                        src={`https://image.tmdb.org/t/p/original/${data.poster_path}`}
+                        alt=""
+                      />
+                    </div>
                     <div className="my-3 flex flex-col">
                       <Link
                         to={`/movie/${data.id}-${data.title}`}

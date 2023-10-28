@@ -1,4 +1,4 @@
-import React, { useContext, useEffect} from "react";
+import React, { useContext, useEffect } from "react";
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import { Carousel } from "react-responsive-carousel";
 import { Link } from "react-router-dom";
@@ -7,7 +7,8 @@ import MovieContext from "../Context/MovieContext";
 
 const Home = () => {
   const context = useContext(MovieContext);
-  const { page, setPage, homePageMovieData, popularMovies, totalPages } = context;
+  const { page, setPage, homePageMovieData, popularMovies, totalPages } =
+    context;
 
   const handleNextClick = () => {
     setPage((prevPage) => prevPage + 1);
@@ -63,12 +64,7 @@ const Home = () => {
                           <span>Vote({movie.vote_count})</span>
                         </div>
                       </div>
-                      <div className="text-start">
-                      {movie.overview
-                          ? movie.overview.length > 30
-                            ? `${movie.overview.slice(0, 30)}...`
-                            : movie.overview
-                          : ""}                      </div>
+                      <div className="text-start">{movie.overview} </div>
                     </div>
                   </div>
                 </Link>
@@ -79,7 +75,9 @@ const Home = () => {
 
         <div className="my-10 mx-4 space-y-4">
           <div className="flex justify-between mx-1">
-            <span className="text-xl md:text-3xl font-semibold">Popular Movies</span>
+            <span className="text-xl md:text-3xl font-semibold">
+              Popular Movies
+            </span>
             <div className="space-x-4 text-white">
               <button
                 className={`shadow-sm shadow-black rounded-lg text-xs md:text-base px-3 py-1 ${
@@ -110,7 +108,7 @@ const Home = () => {
                   <>
                     <div className="space-y-3 w-fit mx-auto" key={movie.id}>
                       <Link className="w-fit" to={`/movie/${movie.id}`}>
-                        <div className="hover:scale-105 duration-500 ease-in-out ">
+                        <div className="md:hover:scale-105 duration-500 ease-in-out ">
                           <img
                             className={`border-0 border-black shadow-sm shadow-black h-[30rem] mx-auto w-screen object-cover md:h-96 rounded-lg`}
                             src={`https://image.tmdb.org/t/p/original/${movie.poster_path}`}

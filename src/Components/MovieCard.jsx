@@ -312,7 +312,7 @@ const MovieCard = () => {
                             to={`/movie/${movie.id}`}
                           >
                             <div
-                              className="hover:scale-105 duration-500 ease-in-out"
+                              className="md:hover:scale-105 duration-500 ease-in-out"
                               onClick={() => handleCardClick(movie.id)}
                             >
                               <img
