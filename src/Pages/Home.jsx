@@ -2,7 +2,7 @@ import React, { useContext, useEffect } from "react";
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import { Carousel } from "react-responsive-carousel";
 import { Link } from "react-router-dom";
-import loadingGif from "../images/loading.gif"
+import loadingGif from "../images/loading.gif";
 import MovieContext from "../Context/MovieContext";
 
 const Home = () => {
@@ -39,12 +39,8 @@ const Home = () => {
           {popularMovies?.map((movie, key) => {
             return (
               <>
-                <Link
-                  key={movie.id}
-                  className="relative"
-                  to={`/movie/${movie.id}`}
-                >
-                  <div className="h-full md:h-fit lg:h-[80vh] mx-auto">
+                <Link key={movie.id} to={`/movie/${movie.id}`}>
+                  <div className=" relative h-full md:h-fit lg:h-[80vh] mx-auto">
                     <img
                       className="w-full h-96 lg:h-fit object-cover"
                       src={`https://image.tmdb.org/t/p/original/${
@@ -74,33 +70,39 @@ const Home = () => {
         </Carousel>
 
         <div className="my-10 mx-4 space-y-4">
-          {popularMovies&&popularMovies.length>0?<div className="flex justify-between mx-1">
-            <span className="text-xl md:text-3xl font-semibold">
-              Popular Movies
-            </span>
-            <div className="space-x-4 text-white">
-              <button
-                className={`shadow-sm shadow-black rounded-lg text-xs md:text-base px-3 py-1 ${
-                  page > 1 ? "bg-sky-700" : "bg-sky-900"
-                } ${page > 1 ? "cursor-pointer" : "cursor-not-allowed"}`}
-                disabled={page <= 1}
-                onClick={handlePreviousClick}
-              >
-                Previous
-              </button>
-              <button
-                className={`shadow-sm shadow-black rounded-lg text-xs md:text-base px-3 py-1 ${
-                  page <= totalPages ? "bg-sky-700" : "bg-sky-900"
-                } ${
-                  page <= totalPages ? "cursor-pointer" : "cursor-not-allowed"
-                }`}
-                disabled={page >= totalPages}
-                onClick={handleNextClick}
-              >
-                Next
-              </button>
+          {popularMovies && popularMovies.length > 0 ? (
+            <div className="flex justify-between mx-1">
+              <span className="text-xl md:text-3xl font-semibold">
+                Popular Movies
+              </span>
+              <div className="space-x-4 text-white">
+                <button
+                  className={`shadow-sm shadow-black rounded-lg text-xs md:text-base px-3 py-1 ${
+                    page > 1 ? "bg-sky-700" : "bg-sky-900"
+                  } ${page > 1 ? "cursor-pointer" : "cursor-not-allowed"}`}
+                  disabled={page <= 1}
+                  onClick={handlePreviousClick}
+                >
+                  Previous
+                </button>
+                <button
+                  className={`shadow-sm shadow-black rounded-lg text-xs md:text-base px-3 py-1 ${
+                    page <= totalPages ? "bg-sky-700" : "bg-sky-900"
+                  } ${
+                    page <= totalPages ? "cursor-pointer" : "cursor-not-allowed"
+                  }`}
+                  disabled={page >= totalPages}
+                  onClick={handleNextClick}
+                >
+                  Next
+                </button>
+              </div>
             </div>
-          </div>:<span><img src={loadingGif} alt="" /></span>}
+          ) : (
+            <span>
+              <img src={loadingGif} alt="" />
+            </span>
+          )}
           <div className="my-4 grid gap-4 grid-flow-row grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
             {popularMovies &&
               popularMovies.map((movie) => {
@@ -113,7 +115,6 @@ const Home = () => {
                             className={`border-0 border-black shadow-sm shadow-black h-[30rem] mx-auto w-screen object-cover md:h-96 rounded-lg`}
                             src={`https://image.tmdb.org/t/p/original/${movie.poster_path}`}
                             alt=""
-                            // onLoad={setFetching(true)}
                           />
                         </div>
                       </Link>
