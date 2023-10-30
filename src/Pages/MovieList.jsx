@@ -34,7 +34,6 @@ const MovieList = () => {
 
       if (response.ok) {
         const data = await response.json();
-        console.log(data);
         setmovieList(data.results);
         setLoading(false);
         setTotalPages(data.total_pages);

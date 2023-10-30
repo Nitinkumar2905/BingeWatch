@@ -1,8 +1,7 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
-import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import MovieContext from "../Context/MovieContext";
 import menu from "../images/menu.png";
-import { queries } from "@testing-library/react";
 
 const Navbar = () => {
   const location = useLocation();
@@ -50,6 +49,7 @@ const Navbar = () => {
     return () => {
       document.removeEventListener("keydown", handleKeyPress);
     };
+    // eslint-disable-next-line
   }, []);
 
   return (

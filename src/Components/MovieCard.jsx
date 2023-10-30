@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import loadingGif from "../images/loading.gif"
 
 const MovieCard = () => {
-  const navigate = useNavigate();
   const [movieDetails, setMovieDetails] = useState([]);
   const [recommended, setRecommended] = useState([]);
   const [page, setPage] = useState(1);
@@ -95,7 +94,6 @@ const MovieCard = () => {
       );
       if (response.ok) {
         const videoData = await response.json();
-        // console.log("video" + videoData.results);
         if (videoData.results && videoData.results.length > 0) {
           // Assuming you want to use the first video's key
           const videoKey = videoData.results[0].key;
@@ -240,8 +238,6 @@ const MovieCard = () => {
                 </span>
                 <iframe
                   className="rounded-lg shadow-sm shadow-black w-[330px] sm:w-[400px] md:w-[860px] xl:w-[490px] h-[230px] md:h-[415px] xl:h-[300px]"
-                  // width={560}
-                  // height={315}
                   title="movieVideo"
                   src={`https://www.youtube.com/embed/${
                     videoKey ? videoKey : ""

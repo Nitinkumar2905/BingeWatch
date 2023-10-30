@@ -36,7 +36,6 @@ const MovieState = (props) => {
     const [query, setQuery] = useState("");
     const [searchResults, setSearchResults] = useState([]);
     const [loading, setLoading] = useState(false);
-    let timer;
 
     const handleSearch = async () => {
         setLoading(true);
@@ -57,7 +56,6 @@ const MovieState = (props) => {
             if (response.ok) {
                 const data = await response.json();
                 setSearchResults(data.results);
-                console.log(data.results);
                 setLoading(false);
             }
         } catch (error) {
