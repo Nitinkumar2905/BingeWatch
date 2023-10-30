@@ -27,7 +27,6 @@ const MovieCard = () => {
       );
       if (response.ok) {
         const data = await response.json();
-        console.log(data);
         setMovieDetails(data);
       } else {
         console.log("network error");
@@ -54,7 +53,6 @@ const MovieCard = () => {
       );
       if (response.ok) {
         const data = await response.json();
-        console.log(data);
         setRecommended(data.results);
         setTotalPages(data.total_pages);
       } else {
@@ -68,13 +66,11 @@ const MovieCard = () => {
   const handleNextClick = () => {
     setPage((prevPage) => prevPage + 1);
     similarMovieData(page + 1);
-    console.log(page);
   };
 
   const handlePreviousClick = () => {
     setPage((prevPage) => prevPage - 1);
     similarMovieData(page - 1);
-    console.log(page);
   };
 
   const updateMovieVideo = async () => {
