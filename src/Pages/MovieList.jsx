@@ -1,8 +1,6 @@
-import React, { useContext, useEffect, useState } from "react";
-import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
+import React, {useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import loadingGif from "../images/loading.gif";
-import MovieContext from "../Context/MovieContext";
 
 const MovieList = () => {
   const [movieList, setmovieList] = useState([]);
@@ -10,10 +8,6 @@ const MovieList = () => {
   const { type } = useParams();
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState([]);
-
-  // const context = useContext(MovieContext);
-  // const { movieListData, page, setPage, movieList, loading, totalPages } =
-  //   context;
 
   const movieListData = async () => {
     try {
